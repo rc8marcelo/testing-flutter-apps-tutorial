@@ -14,6 +14,10 @@ class _NewsPageState extends State<NewsPage> {
   @override
   void initState() {
     super.initState();
+    //* Microtasks are executed before any other Future/s  or Timers
+    //* Ideally use this if you want this action to finish before any other
+    //* Asynchronous tasks
+    //* Multiple microtasks will complete in a FIFO order
     Future.microtask(
       () => context.read<NewsChangeNotifier>().getArticles(),
     );
@@ -29,7 +33,9 @@ class _NewsPageState extends State<NewsPage> {
         builder: (context, notifier, child) {
           if (notifier.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                key: Key('news_page_loader'),
+              ),
             );
           }
           return ListView.builder(
